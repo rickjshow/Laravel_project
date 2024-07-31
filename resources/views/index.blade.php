@@ -7,6 +7,16 @@
     <h3>Lista de Itens</h3>
     <a href="{{ route('product.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Adicionar Item</a>
 </div>
+
+<div class="d-flex justify-content-end mb-3">
+    <form action="{{ route('product.index') }}" method="GET" class="form-inline">
+        <input type="text" name="search" class="form-control mr-2" placeholder="Buscar por nome, código ou descrição..." value="{{ request('search') }}">
+        <button type="submit" class="btn btn-outline-secondary">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+</div>
+
 <table class="table table-striped">
     <thead>
         <tr>

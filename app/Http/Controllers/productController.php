@@ -8,16 +8,20 @@ use Illuminate\Http\Request;
 
 class productController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = Product::query();
 
-        $products = Product::all();
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'like', "%{$search}%")
+                  ->orWhere('codigo', 'like', "%{$search}%")
+                  ->orWhere('descricao', 'like', "%{$search}%");
+        }
+
+        $products = $query->get();
+
         return view('index', compact('products'));
-    }
-
-    public function getById()
-    {
-
     }
 
     public function create()
@@ -48,7 +52,7 @@ class productController extends Controller
     }
 
     public function edit($id)
-    {   
+    {
         $product = Product::findOrFail($id);
         return view('formulario', compact('product'));
     }
@@ -57,7 +61,7 @@ class productController extends Controller
     {
 
         $product = Product::findOrFail($id);
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'codigo' => [
@@ -82,7 +86,7 @@ class productController extends Controller
     }
 
     public function delete(Request $request, $id)
-    {   
+    {
 
         $product = Product::findOrFail($id);
         $product->delete();
